@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>학생 성장 아카이브</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      background: #f5f6f8;
+      color: #222;
+      line-height: 1.5;
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 20px;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
+    }
+
+    header p {
+      margin: 0;
+      color: #666;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .top-layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .box {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #bbb;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #2457c5;
+      color: #fff;
+    }
+
+    .secondary {
+      background: #e9ecf2;
+      color: #222;
+    }
+
+    .search-area {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .card-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .student-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px;
+      background: #fafafa;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .student-card strong {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .student-card span {
+      display: block;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .detail {
+      margin-top: 20px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .info-box {
+      background: #f6f7fa;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .info-box small {
+      color: #666;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .info-box strong {
+      font-size: 18px;
+    }
+
+    .memo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .memo-box {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .memo-box h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .memo-box p {
+      margin: 0;
+      color: #444;
+    }
+
+    .chart {
+      height: 220px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .status-message {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #eef6ee;
+      color: #226622;
+      display: none;
+    }
+
+    .empty {
+      color: #777;
+      padding: 20px;
+      text-align: center;
+      border: 1px dashed #bbb;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+
+    @media (max-width: 800px) {
+      .top-layout,
+      .detail-grid,
+      .memo-grid,
+      .score-row {
+        grid-template-columns: 1fr;
+      }
+
+      .student-card {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap">
+      <h1>학생 성장 아카이브</h1>
+      <p>숙제점수, 수상실점수, 추가점수, 월말점수를 함께 기록하고 총 200점 기준으로 확인합니다.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="top-layout">
+      <div class="box">
+        <h2>학생 성장 기록 입력</h2>
+
+        <form id="recordForm">
+          <label for="name">학생 닉네임</label>
+          <input id="name" type="text" placeholder="예: 김OO" required />
+
+          <label for="month">기록 월</label>
+          <input id="month" type="month" required />
+
+          <div class="score-row">
+            <div>
+              <label for="homeworkScore">숙제 점수 / 40점</label>
+              <input id="homeworkScore" type="number" min="0" max="40" placeholder="예: 35" />
+            </div>
+
+            <div>
+              <label for="studyScore">수상실 점수 / 40점</label>
+              <input id="studyScore" type="number" min="0" max="40" placeholder="예: 38" />
+            </div>
+          </div>
+
+          <div class="score-row">
+            <div>
+              <label for="bonusScore">추가 점수 / 20점</label>
+              <input id="bonusScore" type="number" min="0" max="20" placeholder="예: 15" />
+            </div>
+
+            <div>
+              <label for="examScore">월말 점수 / 100점</label>
+              <input id="examScore" type="number" min="0" max="100" placeholder="예: 88" />
+            </div>
+          </div>
+
+          <label for="comment">선생님 코멘트</label>
+          <textarea id="comment" placeholder="예: 발표 참여가 적극적이었습니다."></textarea>
+
+          <label for="note">특이사항</label>
+          <textarea id="note" placeholder="예: 숙제 제출이 조금 늦었습니다."></textarea>
+
+          <label for="goal">다음 달 목표</label>
+          <textarea id="goal" placeholder="예: 독해 속도 향상"></textarea>
+
+          <div class="button-row">
+            <button class="primary" type="submit">저장하기</button>
+            <button class="secondary" type="button" id="resetBtn">입력 초기화</button>
+          </div>
+
+          <div class="status-message" id="statusMessage">
+            기록이 저장되었습니다. 과정점수와 총점이 자동 계산되었습니다.
+          </div>
+        </form>
+      </div>
+
+      <div class="box">
+        <h2>학생 기록 목록</h2>
+
+        <div class="search-area">
+          <input id="searchInput" type="text" placeholder="학생 검색" />
+          <button class="secondary" id="sortBtn">최신순 정렬</button>
+        </div>
+
+        <div id="recordList" class="card-list"></div>
+      </div>
+    </section>
+
+    <section class="box detail">
+      <h2>학생 상세</h2>
+      <div id="detailArea" class="empty">
+        학생 카드의 [상세보기]를 누르면 성장 기록과 점수 그래프가 표시됩니다.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let records = [
+      {
+        id: 1,
+        name: "김OO",
+        month: "2026-04",
+        homeworkScore: 34,
+        studyScore: 33,
+        bonusScore: 15,
+        examScore: 82,
+        comment: "수업 집중도가 좋아지고 있습니다.",
+        note: "어휘 복습이 조금 더 필요합니다.",
+        goal: "기본 어휘 30개 암기",
+        createdAt: "2026-04-30"
+      },
+      {
+        id: 2,
+        name: "김OO",
+        month: "2026-05",
+        homeworkScore: 36,
+        studyScore: 34,
+        bonusScore: 15,
+        examScore: 85,
+        comment: "문제 풀이 속도가 좋아졌습니다.",
+        note: "긴 지문에서 집중력이 떨어질 때가 있습니다.",
+        goal: "긴 지문 독해 연습",
+        createdAt: "2026-05-31"
+      },
+      {
+        id: 3,
+        name: "김OO",
+        month: "2026-06",
+        homeworkScore: 37,
+        studyScore: 36,
+        bonusScore: 15,
+        examScore: 88,
+        comment: "발표 참여가 적극적이었습니다.",
+        note: "숙제 제출이 조금 늦었습니다.",
+        goal: "독해 속도 향상",
+        createdAt: "2026-06-30"
+      }
+    ];
+
+    const form = document.getElementById("recordForm");
+    const resetBtn = document.getElementById("resetBtn");
+    const searchInput = document.getElementById("searchInput");
+    const sortBtn = document.getElementById("sortBtn");
+    const recordList = document.getElementById("recordList");
+    const detailArea = document.getElementById("detailArea");
+    const statusMessage = document.getElementById("statusMessage");
+
+    function getScoreValue(value) {
+      return Number(value) || 0;
+    }
+
+    function getProcessScore(record) {
+      return (
+        getScoreValue(record.homeworkScore) +
+        getScoreValue(record.studyScore) +
+        getScoreValue(record.bonusScore)
+      );
+    }
+
+    function getTotalScore(record) {
+      return getProcessScore(record) + getScoreValue(record.examScore);
+    }
+
+    function formatMonth(monthText) {
+      const [year, month] = monthText.split("-");
+      return `${year}년 ${Number(month)}월`;
+    }
+
+    function getTodayText() {
+      const today = new Date();
+      return today.toISOString().slice(0, 10);
+    }
+
+    function renderList() {
+      const keyword = searchInput.value.trim().toLowerCase();
+
+      const filteredRecords = records
+        .filter(record => record.name.toLowerCase().includes(keyword))
+        .sort((a, b) => b.month.localeCompare(a.month));
+
+      recordList.innerHTML = "";
+
+      if (filteredRecords.length === 0) {
+        recordList.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`;
+        return;
+      }
+
+      filteredRecords.forEach(record => {
+        const card = document.createElement("div");
+        card.className = "student-card";
+
+        card.innerHTML = `
+          <div>
+            <strong>${record.name}</strong>
+            <span>${formatMonth(record.month)}</span>
+            <span>
+              과정 ${getProcessScore(record)}점 / 100점 
+              · 월말 ${getScoreValue(record.examScore)}점 / 100점
+            </span>
+            <span>
+              총점 ${getTotalScore(record)}점 / 200점 · 등록일 ${record.createdAt}
+            </span>
+          </div>
+          <button class="primary" onclick="showDetail(${record.id})">상세보기</button>
+        `;
+
+        recordList.appendChild(card);
+      });
+    }
+
+    function showDetail(id) {
+      const selected = records.find(record => record.id === id);
+
+      const studentRecords = records
+        .filter(record => record.name === selected.name)
+        .sort((a, b) => a.month.localeCompare(b.month));
+
+      const chartPoints = studentRecords.map(record => ({
+        label: formatMonth(record.month).replace("2026년 ", ""),
+        score: getTotalScore(record)
+      }));
+
+      detailArea.className = "";
+      detailArea.innerHTML = `
+        <div class="detail-grid">
+          <div class="info-box">
+            <small>학생</small>
+            <strong>${selected.name}</strong>
+          </div>
+          <div class="info-box">
+            <small>숙제 점수</small>
+            <strong>${getScoreValue(selected.homeworkScore)} / 40</strong>
+          </div>
+          <div class="info-box">
+            <small>수상실 점수</small>
+            <strong>${getScoreValue(selected.studyScore)} / 40</strong>
+          </div>
+          <div class="info-box">
+            <small>추가 점수</small>
+            <strong>${getScoreValue(selected.bonusScore)} / 20</strong>
+          </div>
+          <div class="info-box">
+            <small>과정점수</small>
+            <strong>${getProcessScore(selected)} / 100</strong>
+          </div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="info-box">
+            <small>최근 기록 월</small>
+            <strong>${formatMonth(selected.month)}</strong>
+          </div>
+          <div class="info-box">
+            <small>월말 점수</small>
+            <strong>${getScoreValue(selected.examScore)} / 100</strong>
+          </div>
+          <div class="info-box">
+            <small>총점</small>
+            <strong>${getTotalScore(selected)} / 200</strong>
+          </div>
+          <div class="info-box">
+            <small>누적 기록</small>
+            <strong>${studentRecords.length}개</strong>
+          </div>
+        </div>
+
+        <div class="memo-grid">
+          <div class="memo-box">
+            <h3>선생님 코멘트</h3>
+            <p>${selected.comment || "입력된 코멘트가 없습니다."}</p>
+          </div>
+          <div class="memo-box">
+            <h3>특이사항</h3>
+            <p>${selected.note || "특이사항 없음"}</p>
+          </div>
+          <div class="memo-box">
+            <h3>다음 달 목표</h3>
+            <p>${selected.goal || "입력된 목표가 없습니다."}</p>
+          </div>
+        </div>
+
+        <div class="chart">
+          <canvas id="growthChart" width="800" height="220"></canvas>
+        </div>
+      `;
+
+      drawChart(chartPoints);
+    }
+
+    function drawChart(points) {
+      const canvas = document.getElementById("growthChart");
+      const ctx = canvas.getContext("2d");
+
+      const width = canvas.width;
+      const height = canvas.height;
+      const padding = 40;
+
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.strokeStyle = "#dddddd";
+      ctx.lineWidth = 1;
+
+      ctx.beginPath();
+      ctx.moveTo(padding, padding);
+      ctx.lineTo(padding, height - padding);
+      ctx.lineTo(width - padding, height - padding);
+      ctx.stroke();
+
+      if (points.length === 0) return;
+
+      const maxScore = 200;
+      const minScore = 0;
+      const gap = points.length === 1 ? 0 : (width - padding * 2) / (points.length - 1);
+
+      const positions = points.map((point, index) => {
+        const x = points.length === 1 ? width / 2 : padding + gap * index;
+        const y = height - padding - ((point.score - minScore) / (maxScore - minScore)) * (height - padding * 2);
+        return { ...point, x, y };
+      });
+
+      ctx.strokeStyle = "#2457c5";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+
+      positions.forEach((point, index) => {
+        if (index === 0) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
+      });
+
+      ctx.stroke();
+
+      positions.forEach(point => {
+        ctx.fillStyle = "#2457c5";
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#222";
+        ctx.font = "14px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(`${point.score}점`, point.x, point.y - 12);
+        ctx.fillText(point.label, point.x, height - 14);
+      });
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const newRecord = {
+        id: Date.now(),
+        name: document.getElementById("name").value.trim(),
+        month: document.getElementById("month").value,
+        homeworkScore: Number(document.getElementById("homeworkScore").value) || 0,
+        studyScore: Number(document.getElementById("studyScore").value) || 0,
+        bonusScore: Number(document.getElementById("bonusScore").value) || 0,
+        examScore: Number(document.getElementById("examScore").value) || 0,
+        comment: document.getElementById("comment").value.trim(),
+        note: document.getElementById("note").value.trim(),
+        goal: document.getElementById("goal").value.trim(),
+        createdAt: getTodayText()
+      };
+
+      records.push(newRecord);
+      renderList();
+      showDetail(newRecord.id);
+
+      statusMessage.style.display = "block";
+
+      setTimeout(() => {
+        statusMessage.style.display = "none";
+      }, 2500);
+
+      form.reset();
+    });
+
+    resetBtn.addEventListener("click", function() {
+      form.reset();
+      statusMessage.style.display = "none";
+    });
+
+    searchInput.addEventListener("input", renderList);
+    sortBtn.addEventListener("click", renderList);
+
+    renderList();
+    showDetail(3);
+  </script>
+</body>
+</html>
