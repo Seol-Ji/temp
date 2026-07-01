@@ -6,897 +6,209 @@
   <title>학생 성장 아카이브</title>
   <style>
     * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, "Noto Sans KR", sans-serif;
-      background: #f5f6f8;
-      color: #222;
-      line-height: 1.5;
+    :root {
+      --navy:#28264f; --navy2:#19244b; --blue:#1f4ea8; --line:#dbe2ef; --bg:#f6f8fc; --text:#17213a; --muted:#6c7485; --soft:#f9fbff; --green:#1c8b54; --red:#d44848;
     }
-
-    header {
-      background: #fff;
-      border-bottom: 1px solid #ddd;
-      padding: 20px;
-    }
-
-    header h1 {
-      margin: 0 0 6px;
-      font-size: 26px;
-    }
-
-    header p {
-      margin: 0;
-      color: #666;
-    }
-
-    .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .mode-buttons {
-      display: flex;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .top-layout {
-      display: grid;
-      grid-template-columns: 390px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
-
-    .box {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 18px;
-      margin-bottom: 20px;
-    }
-
-    h2 {
-      margin: 0 0 14px;
-      font-size: 20px;
-    }
-
-    label {
-      display: block;
-      margin-top: 12px;
-      margin-bottom: 5px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #bbb;
-      border-radius: 8px;
-      font-size: 15px;
-    }
-
-    textarea {
-      min-height: 70px;
-      resize: vertical;
-    }
-
-    .score-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .button-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 16px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: 0;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .primary {
-      background: #2457c5;
-      color: #fff;
-    }
-
-    .secondary {
-      background: #e9ecf2;
-      color: #222;
-    }
-
-    .danger {
-      background: #f2e9e9;
-      color: #a33333;
-    }
-
-    .search-area {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .card-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .student-card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 14px;
-      background: #fafafa;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .student-card strong {
-      display: block;
-      font-size: 18px;
-      margin-bottom: 4px;
-    }
-
-    .student-card span {
-      display: block;
-      color: #555;
-      font-size: 14px;
-    }
-
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .info-box {
-      background: #f6f7fa;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 12px;
-    }
-
-    .info-box small {
-      color: #666;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .info-box strong {
-      font-size: 18px;
-    }
-
-    .memo-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .memo-box {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 12px;
-      background: #fff;
-    }
-
-    .memo-box h3 {
-      margin: 0 0 8px;
-      font-size: 16px;
-    }
-
-    .memo-box p {
-      margin: 0;
-      color: #444;
-    }
-
-    .chart {
-      height: 220px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 12px;
-      background: #fff;
-    }
-
-    .status-message {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 8px;
-      background: #eef6ee;
-      color: #226622;
-      display: none;
-    }
-
-    .error-message {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 8px;
-      background: #fff0f0;
-      color: #a33333;
-      display: none;
-    }
-
-    .empty {
-      color: #777;
-      padding: 20px;
-      text-align: center;
-      border: 1px dashed #bbb;
-      border-radius: 10px;
-      background: #fafafa;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .notice {
-      font-size: 14px;
-      color: #666;
-      background: #f7f7f7;
-      border: 1px solid #ddd;
-      padding: 12px;
-      border-radius: 10px;
-      margin-top: 14px;
-    }
-
-    @media (max-width: 800px) {
-      .top-layout,
-      .detail-grid,
-      .memo-grid,
-      .score-row {
-        grid-template-columns: 1fr;
-      }
-
-      .student-card {
-        grid-template-columns: 1fr;
-      }
-
-      header h1 {
-        font-size: 22px;
-      }
-
-      .search-area {
-        flex-direction: column;
-      }
-    }
+    body { margin:0; font-family: Arial, 'Noto Sans KR', sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    .hero { background:linear-gradient(135deg,var(--navy),var(--navy2)); color:white; box-shadow:0 8px 30px rgba(20,30,70,.18); }
+    .wrap { max-width:1220px; margin:0 auto; padding:22px; }
+    .hero-inner { display:flex; align-items:center; gap:28px; min-height:150px; }
+    .logo { width:105px; height:105px; object-fit:contain; background:#28264f; border-radius:4px; }
+    h1 { margin:0 0 10px; font-size:38px; letter-spacing:-1px; }
+    .hero p { margin:0; opacity:.92; font-size:17px; }
+    .modebar { display:flex; justify-content:center; gap:12px; margin:22px 0; }
+    button { border:0; border-radius:9px; padding:11px 18px; font-size:15px; font-weight:700; cursor:pointer; }
+    .primary { background:var(--navy2); color:#fff; box-shadow:0 4px 10px rgba(25,36,75,.18); }
+    .secondary { background:#fff; color:var(--navy2); border:1px solid var(--line); }
+    .ghost { background:#eef2f8; color:#536071; }
+    .grid-main { display:grid; grid-template-columns: 1fr 1fr; gap:20px; align-items:start; }
+    .panel { background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px; box-shadow:0 7px 18px rgba(20,30,70,.04); }
+    .panel h2 { margin:0 0 16px; font-size:21px; color:var(--navy2); border-bottom:1px solid var(--line); padding-bottom:12px; }
+    label { display:block; font-size:14px; font-weight:800; margin:12px 0 6px; color:#24304d; }
+    input, textarea { width:100%; border:1px solid #ccd5e4; border-radius:8px; padding:12px; font-size:15px; background:white; }
+    input:focus, textarea:focus { outline:2px solid #d8e7ff; border-color:#7fa6e8; }
+    textarea { min-height:64px; resize:vertical; }
+    .row3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .row2 { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .score-box { border:1px solid #cfe0f8; border-radius:10px; padding:12px; margin-top:14px; background:#fbfdff; }
+    .score-box b { color:var(--blue); }
+    .actions { display:flex; gap:12px; margin-top:18px; }
+    .status { display:none; margin-top:14px; padding:12px; border-radius:9px; background:#ecf8f1; color:var(--green); font-weight:700; }
+    .search { display:flex; gap:12px; margin-bottom:16px; }
+    .search input { flex:1; }
+    .list { display:grid; gap:13px; }
+    .card { border:1px solid var(--line); border-radius:11px; padding:16px; background:linear-gradient(180deg,#fbfdff,#fff); display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center; }
+    .card.active { border-color:#8fb8ef; background:#f1f7ff; }
+    .name-line { display:flex; gap:10px; align-items:center; margin-bottom:8px; }
+    .badge { background:var(--blue); color:white; font-size:13px; font-weight:800; padding:3px 8px; border-radius:5px; }
+    .student-name { font-size:19px; font-weight:900; }
+    .meta { color:var(--muted); font-size:14px; }
+    .score-line { margin-top:7px; font-size:15px; }
+    .score-line b { color:var(--navy2); }
+    .detail { margin-top:20px; }
+    .detail-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .info-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin:16px 0; }
+    .metric { border:1px solid var(--line); border-radius:10px; padding:14px; background:#fbfcff; text-align:center; }
+    .metric small { display:block; color:var(--muted); font-weight:700; }
+    .metric strong { display:block; font-size:24px; color:var(--navy2); margin-top:6px; }
+    .metric .up { color:#c53030; }
+    .memo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .memo { border:1px solid var(--line); border-radius:10px; padding:14px; background:#fff; }
+    .memo h3 { margin:0 0 8px; color:var(--navy2); font-size:16px; }
+    .memo p { margin:0; color:#3b4558; }
+    .chart-wrap { border:1px solid var(--line); border-radius:12px; background:#fff; padding:16px; margin-top:14px; }
+    canvas { width:100%; height:230px; }
+    .hidden { display:none; }
+    .empty { border:1px dashed #b9c3d4; border-radius:10px; padding:24px; color:var(--muted); text-align:center; background:#fbfcff; }
+    .parent-layout { display:grid; grid-template-columns: 430px 1fr; gap:20px; }
+    .notice { margin-top:14px; padding:14px; border-radius:10px; background:#f1f4f8; color:#596578; font-size:14px; }
+    .error { display:none; margin-top:12px; padding:12px; border-radius:9px; color:var(--red); background:#fff0f0; font-weight:800; }
+    .safe-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+    .safe { padding:14px; background:#f7f9fc; border-radius:10px; border:1px solid var(--line); }
+    .safe div { margin:6px 0; }
+    .ok { color:var(--green); font-weight:900; } .no { color:var(--red); font-weight:900; }
+    @media(max-width:900px) { .hero-inner,.grid-main,.parent-layout,.info-grid,.memo-grid,.row2,.row3,.safe-grid { grid-template-columns:1fr; display:grid; } .hero-inner { text-align:center; justify-items:center; } .logo { width:86px; height:86px; } h1 { font-size:28px; } .card { grid-template-columns:1fr; } .search,.actions,.modebar { flex-direction:column; } }
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="wrap">
-      <h1>학생 성장 아카이브</h1>
-      <p>선생님은 전체 기록을 관리하고, 학부모는 접근코드로 내 아이 기록만 확인합니다.</p>
-
-      <div class="mode-buttons">
-        <button class="primary" id="teacherModeBtn">선생님 화면</button>
-        <button class="secondary" id="parentModeBtn">학부모 화면</button>
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <img class="logo" src="data:image/png;base64,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" alt="수학적상상력 로고" />
+      <div>
+        <h1>학생 성장 아카이브</h1>
+        <p>학생의 성장 과정을 기록하고, 반 평균과 함께 안정적으로 관리합니다.</p>
       </div>
     </div>
   </header>
 
   <main class="wrap">
+    <div class="modebar">
+      <button id="teacherModeBtn" class="primary">선생님 화면</button>
+      <button id="parentModeBtn" class="secondary">학부모 화면</button>
+    </div>
+
     <section id="teacherPage">
-      <div class="top-layout">
-        <div class="box">
+      <div class="grid-main">
+        <section class="panel">
           <h2>학생 성장 기록 입력</h2>
-
           <form id="recordForm">
-            <label for="className">반</label>
-            <input id="className" type="text" placeholder="예: 초3-1" required />
-
-            <label for="name">학생 닉네임</label>
-            <input id="name" type="text" placeholder="예: 김OO" required />
-
-            <label for="parentCode">학부모 접근코드</label>
-            <input id="parentCode" type="text" placeholder="예: KIM4821" required />
-
-            <label for="month">기록 월</label>
-            <input id="month" type="month" required />
-
-            <div class="score-row">
-              <div>
-                <label for="homeworkScore">숙제 점수 / 40점</label>
-                <input id="homeworkScore" type="number" min="0" max="40" placeholder="예: 35" />
-              </div>
-
-              <div>
-                <label for="studyScore">수상실 점수 / 40점</label>
-                <input id="studyScore" type="number" min="0" max="40" placeholder="예: 38" />
+            <div class="row3">
+              <div><label for="className">반</label><input id="className" placeholder="예: 초3-1" required /></div>
+              <div><label for="name">학생 닉네임</label><input id="name" placeholder="예: 김OO" required /></div>
+              <div><label for="parentCode">학부모 접근코드</label><input id="parentCode" placeholder="예: KIM4821" required /></div>
+            </div>
+            <label for="month">기록 월</label><input id="month" type="month" required />
+            <div class="score-box">
+              <b>과정점수 (100점)</b>
+              <div class="row3">
+                <div><label for="homeworkScore">숙제 점수 / 40점</label><input id="homeworkScore" type="number" min="0" max="40" placeholder="0 ~ 40" /></div>
+                <div><label for="studyScore">수상실 점수 / 40점</label><input id="studyScore" type="number" min="0" max="40" placeholder="0 ~ 40" /></div>
+                <div><label for="bonusScore">추가 점수 / 20점</label><input id="bonusScore" type="number" min="0" max="20" placeholder="0 ~ 20" /></div>
               </div>
             </div>
-
-            <div class="score-row">
-              <div>
-                <label for="bonusScore">추가 점수 / 20점</label>
-                <input id="bonusScore" type="number" min="0" max="20" placeholder="예: 15" />
-              </div>
-
-              <div>
-                <label for="examScore">월말 점수 / 100점</label>
-                <input id="examScore" type="number" min="0" max="100" placeholder="예: 88" />
-              </div>
+            <div class="score-box">
+              <b>월말 평가 (100점)</b>
+              <label for="examScore">월말 점수 / 100점</label><input id="examScore" type="number" min="0" max="100" placeholder="0 ~ 100" />
             </div>
-
-            <label for="teacherMemo">선생님 내부 메모</label>
-            <textarea id="teacherMemo" placeholder="학부모에게 보이지 않는 인수인계 메모"></textarea>
-
-            <label for="parentComment">학부모 공유 코멘트</label>
-            <textarea id="parentComment" placeholder="학부모에게 보여줘도 되는 코멘트"></textarea>
-
-            <label for="goal">다음 달 목표</label>
-            <textarea id="goal" placeholder="예: 계산 실수 줄이기"></textarea>
-
-            <div class="button-row">
-              <button class="primary" type="submit">저장하기</button>
-              <button class="secondary" type="button" id="resetBtn">입력 초기화</button>
-            </div>
-
-            <div class="status-message" id="statusMessage">
-              기록이 저장되었습니다. 과정점수, 총점, 반 평균이 자동 계산됩니다.
-            </div>
+            <label for="teacherMemo">선생님 내부 메모 <span class="meta">(학부모에게 보이지 않음)</span></label><textarea id="teacherMemo" placeholder="인수인계용 메모를 입력하세요."></textarea>
+            <label for="parentComment">학부모 공유 코멘트 <span class="meta">(학부모에게 표시)</span></label><textarea id="parentComment" placeholder="학부모에게 보여줄 코멘트를 입력하세요."></textarea>
+            <label for="goal">다음 달 목표</label><textarea id="goal" placeholder="다음 달 목표를 입력하세요."></textarea>
+            <div class="actions"><button class="primary" type="submit">저장하기</button><button class="ghost" type="button" id="resetBtn">입력 초기화</button></div>
+            <div class="status" id="statusMessage">기록이 저장되었습니다.</div>
           </form>
-        </div>
+        </section>
 
-        <div class="box">
+        <section class="panel">
           <h2>학생 기록 목록</h2>
-
-          <div class="search-area">
-            <input id="searchInput" type="text" placeholder="학생 또는 반 검색" />
-            <button class="secondary" id="sortBtn">최신순 정렬</button>
-          </div>
-
-          <div id="recordList" class="card-list"></div>
-        </div>
+          <div class="search"><input id="searchInput" placeholder="학생 또는 반 검색" /><button class="secondary" id="sortBtn">최신순 정렬</button></div>
+          <div id="recordList" class="list"></div>
+        </section>
       </div>
 
-      <section class="box">
-        <h2>학생 상세 - 선생님용</h2>
-        <div id="teacherDetailArea" class="empty">
-          학생 카드의 [상세보기]를 누르면 성장 기록과 반 평균 비교가 표시됩니다.
-        </div>
+      <section class="panel detail">
+        <div class="detail-head"><h2>학생 상세 정보 <span class="meta">(선생님용)</span></h2><button class="primary" id="openParentReportBtn">학부모 리포트 보기</button></div>
+        <div id="teacherDetailArea" class="empty">학생 카드의 상세보기를 누르면 성장 기록과 반 평균 비교가 표시됩니다.</div>
       </section>
     </section>
 
     <section id="parentPage" class="hidden">
-      <div class="box">
-        <h2>학부모용 성장 리포트</h2>
-
-        <label for="parentStudentName">학생 이름</label>
-        <input id="parentStudentName" type="text" placeholder="예: 김OO" />
-
-        <label for="parentAccessCode">학부모 접근코드</label>
-        <input id="parentAccessCode" type="text" placeholder="예: KIM4821" />
-
-        <div class="button-row">
-          <button class="primary" id="parentLoginBtn">내 아이 기록 보기</button>
-        </div>
-
-        <div class="error-message" id="parentError">
-          학생 이름 또는 접근코드가 올바르지 않습니다.
-        </div>
-
-        <div class="notice">
-          데모용 HTML에서는 접근코드로 화면을 나누지만, 실제 서비스에서는 다른 학생 데이터가 아예 내려오지 않도록 Firebase나 Supabase 같은 DB 연결이 필요합니다.
-        </div>
+      <div class="parent-layout">
+        <section class="panel">
+          <h2>학부모 화면 - 내 아이 성장 리포트</h2>
+          <p class="meta">학생 이름과 접근코드를 입력하시면, 내 아이의 기록만 확인할 수 있습니다.</p>
+          <label for="parentStudentName">학생 이름</label><input id="parentStudentName" placeholder="예: 김OO" />
+          <label for="parentAccessCode">학부모 접근코드</label><input id="parentAccessCode" placeholder="예: KIM4821" />
+          <div class="actions"><button class="primary" id="parentLoginBtn">내 아이 기록 보기</button></div>
+          <div class="error" id="parentError">학생 이름 또는 접근코드가 올바르지 않습니다.</div>
+          <div class="notice">현재 파일은 데모용입니다. 실제 서비스에서는 다른 학생 데이터가 학부모 화면으로 내려오지 않도록 DB와 권한 설정이 필요합니다.</div>
+        </section>
+        <section class="panel">
+          <h2>보안 안내</h2>
+          <div class="safe-grid">
+            <div class="safe"><b>학부모 화면 제공 정보</b><div><span class="ok">✓</span> 내 아이 점수와 반 평균</div><div><span class="ok">✓</span> 선생님 공유 코멘트</div><div><span class="ok">✓</span> 다음 달 목표</div><div><span class="ok">✓</span> 성장 그래프</div></div>
+            <div class="safe"><b>제공하지 않는 정보</b><div><span class="no">×</span> 다른 학생 목록과 점수</div><div><span class="no">×</span> 학생 검색</div><div><span class="no">×</span> 선생님 내부 메모</div><div><span class="no">×</span> 반 전체 학생 데이터</div></div>
+          </div>
+        </section>
       </div>
-
-      <div class="box">
-        <h2>내 아이 성장 리포트</h2>
-        <div id="parentReportArea" class="empty">
-          학생 이름과 접근코드를 입력하면 내 아이 기록만 표시됩니다.
-        </div>
-      </div>
+      <section class="panel">
+        <h2>내 아이 리포트</h2>
+        <div id="parentReportArea" class="empty">학생 이름과 접근코드를 입력하면 리포트가 표시됩니다.</div>
+      </section>
     </section>
   </main>
 
   <script>
+    let selectedRecordId = 3;
     let records = [
-      {
-        id: 1,
-        className: "초3-1",
-        name: "김OO",
-        parentCode: "KIM4821",
-        month: "2026-04",
-        homeworkScore: 34,
-        studyScore: 33,
-        bonusScore: 15,
-        examScore: 82,
-        teacherMemo: "어휘 복습을 더 챙겨야 합니다.",
-        parentComment: "수업 집중도가 좋아지고 있습니다.",
-        goal: "기본 어휘 30개 암기",
-        createdAt: "2026-04-30"
-      },
-      {
-        id: 2,
-        className: "초3-1",
-        name: "김OO",
-        parentCode: "KIM4821",
-        month: "2026-05",
-        homeworkScore: 36,
-        studyScore: 34,
-        bonusScore: 15,
-        examScore: 85,
-        teacherMemo: "긴 지문에서 집중력이 떨어질 때가 있습니다.",
-        parentComment: "문제 풀이 속도가 좋아졌습니다.",
-        goal: "긴 지문 독해 연습",
-        createdAt: "2026-05-31"
-      },
-      {
-        id: 3,
-        className: "초3-1",
-        name: "김OO",
-        parentCode: "KIM4821",
-        month: "2026-06",
-        homeworkScore: 37,
-        studyScore: 36,
-        bonusScore: 18,
-        examScore: 88,
-        teacherMemo: "숙제 제출이 조금 늦었습니다.",
-        parentComment: "발표 참여가 적극적이었습니다.",
-        goal: "계산 실수 줄이기",
-        createdAt: "2026-06-30"
-      },
-      {
-        id: 4,
-        className: "초3-1",
-        name: "이OO",
-        parentCode: "LEE7392",
-        month: "2026-06",
-        homeworkScore: 35,
-        studyScore: 35,
-        bonusScore: 16,
-        examScore: 84,
-        teacherMemo: "문제 풀이 과정을 더 자세히 확인해야 합니다.",
-        parentComment: "기본 개념 이해가 안정적입니다.",
-        goal: "서술형 풀이 연습",
-        createdAt: "2026-06-30"
-      },
-      {
-        id: 5,
-        className: "초3-1",
-        name: "박OO",
-        parentCode: "PARK1058",
-        month: "2026-06",
-        homeworkScore: 32,
-        studyScore: 34,
-        bonusScore: 14,
-        examScore: 80,
-        teacherMemo: "오답 정리 습관이 필요합니다.",
-        parentComment: "꾸준히 따라오고 있으며 복습이 중요합니다.",
-        goal: "오답노트 작성",
-        createdAt: "2026-06-30"
-      }
+      {id:1,className:'초3-1',name:'김OO',parentCode:'KIM4821',month:'2026-04',homeworkScore:31,studyScore:32,bonusScore:13,examScore:82,teacherMemo:'어휘 복습을 더 챙겨야 합니다.',parentComment:'수업 집중도가 좋아지고 있습니다.',goal:'기본 어휘 30개 암기',createdAt:'2026-04-30'},
+      {id:2,className:'초3-1',name:'김OO',parentCode:'KIM4821',month:'2026-05',homeworkScore:35,studyScore:33,bonusScore:15,examScore:85,teacherMemo:'긴 지문에서 집중력이 떨어질 때가 있습니다.',parentComment:'문제 풀이 속도가 좋아졌습니다.',goal:'긴 지문 독해 연습',createdAt:'2026-05-31'},
+      {id:3,className:'초3-1',name:'김OO',parentCode:'KIM4821',month:'2026-06',homeworkScore:37,studyScore:36,bonusScore:18,examScore:88,teacherMemo:'숙제 제출이 조금 늦었습니다. 지문 이해도는 꾸준히 향상 중입니다.',parentComment:'발표 참여가 적극적이었고 꾸준히 성장하고 있습니다.',goal:'계산 실수 줄이기',createdAt:'2026-06-30'},
+      {id:4,className:'초3-1',name:'이OO',parentCode:'LEE7392',month:'2026-06',homeworkScore:35,studyScore:35,bonusScore:16,examScore:84,teacherMemo:'풀이 과정을 더 자세히 확인해야 합니다.',parentComment:'기본 개념 이해가 안정적입니다.',goal:'서술형 풀이 연습',createdAt:'2026-06-30'},
+      {id:5,className:'초3-1',name:'박OO',parentCode:'PARK1058',month:'2026-06',homeworkScore:32,studyScore:34,bonusScore:14,examScore:80,teacherMemo:'오답 정리 습관이 필요합니다.',parentComment:'꾸준히 따라오고 있으며 복습이 중요합니다.',goal:'오답노트 작성',createdAt:'2026-06-30'},
+      {id:6,className:'초4-1',name:'최OO',parentCode:'CHOI2421',month:'2026-06',homeworkScore:36,studyScore:34,bonusScore:18,examScore:86,teacherMemo:'응용 문제에서 자신감이 필요합니다.',parentComment:'성실하게 수업에 참여하고 있습니다.',goal:'응용 문제 5문항 풀이',createdAt:'2026-06-30'}
     ];
-
-    const teacherPage = document.getElementById("teacherPage");
-    const parentPage = document.getElementById("parentPage");
-    const teacherModeBtn = document.getElementById("teacherModeBtn");
-    const parentModeBtn = document.getElementById("parentModeBtn");
-
-    const form = document.getElementById("recordForm");
-    const resetBtn = document.getElementById("resetBtn");
-    const searchInput = document.getElementById("searchInput");
-    const sortBtn = document.getElementById("sortBtn");
-    const recordList = document.getElementById("recordList");
-    const teacherDetailArea = document.getElementById("teacherDetailArea");
-    const statusMessage = document.getElementById("statusMessage");
-
-    const parentStudentName = document.getElementById("parentStudentName");
-    const parentAccessCode = document.getElementById("parentAccessCode");
-    const parentLoginBtn = document.getElementById("parentLoginBtn");
-    const parentError = document.getElementById("parentError");
-    const parentReportArea = document.getElementById("parentReportArea");
-
-    function getScoreValue(value) {
-      return Number(value) || 0;
-    }
-
-    function getProcessScore(record) {
-      return (
-        getScoreValue(record.homeworkScore) +
-        getScoreValue(record.studyScore) +
-        getScoreValue(record.bonusScore)
-      );
-    }
-
-    function getTotalScore(record) {
-      return getProcessScore(record) + getScoreValue(record.examScore);
-    }
-
-    function formatMonth(monthText) {
-      const [year, month] = monthText.split("-");
-      return `${year}년 ${Number(month)}월`;
-    }
-
-    function getTodayText() {
-      const today = new Date();
-      return today.toISOString().slice(0, 10);
-    }
-
-    function getClassMonthlyAverage(className, month) {
-      const sameClassRecords = records.filter(record =>
-        record.className === className && record.month === month
-      );
-
-      if (sameClassRecords.length === 0) return 0;
-
-      const total = sameClassRecords.reduce((sum, record) => {
-        return sum + getScoreValue(record.examScore);
-      }, 0);
-
-      return Math.round(total / sameClassRecords.length);
-    }
-
-    function getClassTotalAverage(className, month) {
-      const sameClassRecords = records.filter(record =>
-        record.className === className && record.month === month
-      );
-
-      if (sameClassRecords.length === 0) return 0;
-
-      const total = sameClassRecords.reduce((sum, record) => {
-        return sum + getTotalScore(record);
-      }, 0);
-
-      return Math.round(total / sameClassRecords.length);
-    }
-
-    function getDifferenceText(studentScore, averageScore) {
-      const diff = studentScore - averageScore;
-
-      if (diff > 0) return `반 평균보다 +${diff}점`;
-      if (diff < 0) return `반 평균보다 ${diff}점`;
-      return "반 평균과 동일";
-    }
-
-    function showTeacherPage() {
-      teacherPage.classList.remove("hidden");
-      parentPage.classList.add("hidden");
-      teacherModeBtn.className = "primary";
-      parentModeBtn.className = "secondary";
-    }
-
-    function showParentPage() {
-      teacherPage.classList.add("hidden");
-      parentPage.classList.remove("hidden");
-      teacherModeBtn.className = "secondary";
-      parentModeBtn.className = "primary";
-    }
-
+    const $ = id => document.getElementById(id);
+    function num(v) { return Number(v) || 0; }
+    function process(r) { return num(r.homeworkScore)+num(r.studyScore)+num(r.bonusScore); }
+    function total(r) { return process(r)+num(r.examScore); }
+    function fmtMonth(m) { const [y,mo]=m.split('-'); return `${y}년 ${Number(mo)}월`; }
+    function today() { return new Date().toISOString().slice(0,10); }
+    function avgExam(c,m) { const arr=records.filter(r=>r.className===c&&r.month===m); return arr.length?Math.round(arr.reduce((s,r)=>s+num(r.examScore),0)/arr.length):0; }
+    function avgTotal(c,m) { const arr=records.filter(r=>r.className===c&&r.month===m); return arr.length?Math.round(arr.reduce((s,r)=>s+total(r),0)/arr.length):0; }
+    function diffText(a,b) { const d=a-b; return d>0?`+${d}점`:d<0?`${d}점`:'0점'; }
+    function showTeacher() { $('teacherPage').classList.remove('hidden'); $('parentPage').classList.add('hidden'); $('teacherModeBtn').className='primary'; $('parentModeBtn').className='secondary'; }
+    function showParent() { $('teacherPage').classList.add('hidden'); $('parentPage').classList.remove('hidden'); $('teacherModeBtn').className='secondary'; $('parentModeBtn').className='primary'; }
     function renderList() {
-      const keyword = searchInput.value.trim().toLowerCase();
-
-      const filteredRecords = records
-        .filter(record =>
-          record.name.toLowerCase().includes(keyword) ||
-          record.className.toLowerCase().includes(keyword)
-        )
-        .sort((a, b) => b.month.localeCompare(a.month));
-
-      recordList.innerHTML = "";
-
-      if (filteredRecords.length === 0) {
-        recordList.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`;
-        return;
-      }
-
-      filteredRecords.forEach(record => {
-        const classExamAverage = getClassMonthlyAverage(record.className, record.month);
-
-        const card = document.createElement("div");
-        card.className = "student-card";
-
-        card.innerHTML = `
-          <div>
-            <strong>${record.name}</strong>
-            <span>${record.className} · ${formatMonth(record.month)}</span>
-            <span>과정 ${getProcessScore(record)}점 / 100점 · 월말 ${getScoreValue(record.examScore)}점 / 100점</span>
-            <span>총점 ${getTotalScore(record)}점 / 200점 · 반 월말평균 ${classExamAverage}점</span>
-            <span>등록일 ${record.createdAt}</span>
-          </div>
-          <button class="primary" onclick="showTeacherDetail(${record.id})">상세보기</button>
-        `;
-
-        recordList.appendChild(card);
+      const k=$('searchInput').value.trim().toLowerCase();
+      const arr=records.filter(r=>r.name.toLowerCase().includes(k)||r.className.toLowerCase().includes(k)).sort((a,b)=>b.month.localeCompare(a.month));
+      $('recordList').innerHTML = arr.length?'':'<div class="empty">검색 결과가 없습니다.</div>';
+      arr.forEach(r=>{
+        const card=document.createElement('div'); card.className='card'+(r.id===selectedRecordId?' active':'');
+        card.innerHTML=`<div><div class="name-line"><span class="badge">${r.className}</span><span class="student-name">${r.name}</span><span class="meta">${fmtMonth(r.month)}</span></div><div class="score-line">과정 <b>${process(r)}</b> /100 &nbsp; | &nbsp; 월말 <b>${num(r.examScore)}</b> /100 &nbsp; | &nbsp; 총점 <b>${total(r)}</b> /200</div><div class="meta">반 월말평균 ${avgExam(r.className,r.month)}점 &nbsp; | &nbsp; 반 총점평균 ${avgTotal(r.className,r.month)}점</div></div><button class="secondary" onclick="showTeacherDetail(${r.id})">상세보기</button>`;
+        $('recordList').appendChild(card);
       });
     }
-
     function showTeacherDetail(id) {
-      const selected = records.find(record => record.id === id);
-
-      const studentRecords = records
-        .filter(record => record.name === selected.name && record.parentCode === selected.parentCode)
-        .sort((a, b) => a.month.localeCompare(b.month));
-
-      const classExamAverage = getClassMonthlyAverage(selected.className, selected.month);
-      const classTotalAverage = getClassTotalAverage(selected.className, selected.month);
-
-      const chartPoints = studentRecords.map(record => ({
-        label: formatMonth(record.month).replace("2026년 ", ""),
-        score: getTotalScore(record)
-      }));
-
-      teacherDetailArea.className = "";
-      teacherDetailArea.innerHTML = `
-        <div class="detail-grid">
-          <div class="info-box">
-            <small>학생</small>
-            <strong>${selected.name}</strong>
-          </div>
-          <div class="info-box">
-            <small>반</small>
-            <strong>${selected.className}</strong>
-          </div>
-          <div class="info-box">
-            <small>과정점수</small>
-            <strong>${getProcessScore(selected)} / 100</strong>
-          </div>
-          <div class="info-box">
-            <small>월말점수</small>
-            <strong>${getScoreValue(selected.examScore)} / 100</strong>
-          </div>
-          <div class="info-box">
-            <small>총점</small>
-            <strong>${getTotalScore(selected)} / 200</strong>
-          </div>
-        </div>
-
-        <div class="detail-grid">
-          <div class="info-box">
-            <small>반 월말평균</small>
-            <strong>${classExamAverage} / 100</strong>
-          </div>
-          <div class="info-box">
-            <small>월말 비교</small>
-            <strong>${getDifferenceText(getScoreValue(selected.examScore), classExamAverage)}</strong>
-          </div>
-          <div class="info-box">
-            <small>반 총점평균</small>
-            <strong>${classTotalAverage} / 200</strong>
-          </div>
-          <div class="info-box">
-            <small>총점 비교</small>
-            <strong>${getDifferenceText(getTotalScore(selected), classTotalAverage)}</strong>
-          </div>
-          <div class="info-box">
-            <small>학부모 코드</small>
-            <strong>${selected.parentCode}</strong>
-          </div>
-        </div>
-
-        <div class="memo-grid">
-          <div class="memo-box">
-            <h3>선생님 내부 메모</h3>
-            <p>${selected.teacherMemo || "입력된 내부 메모가 없습니다."}</p>
-          </div>
-          <div class="memo-box">
-            <h3>학부모 공유 코멘트</h3>
-            <p>${selected.parentComment || "입력된 공유 코멘트가 없습니다."}</p>
-          </div>
-          <div class="memo-box">
-            <h3>다음 달 목표</h3>
-            <p>${selected.goal || "입력된 목표가 없습니다."}</p>
-          </div>
-        </div>
-
-        <div class="chart">
-          <canvas id="teacherChart" width="800" height="220"></canvas>
-        </div>
-      `;
-
-      drawChart("teacherChart", chartPoints, 200);
+      selectedRecordId=id; const r=records.find(x=>x.id===id); const student=records.filter(x=>x.name===r.name&&x.parentCode===r.parentCode).sort((a,b)=>a.month.localeCompare(b.month));
+      const ae=avgExam(r.className,r.month), at=avgTotal(r.className,r.month);
+      $('teacherDetailArea').className='';
+      $('teacherDetailArea').innerHTML=`<div class="name-line"><span class="student-name">${r.name}</span><span class="badge">${r.className}</span><span class="meta">${fmtMonth(r.month)} 기록</span></div><div class="meta">학부모 접근코드: <b>${r.parentCode}</b></div><div class="info-grid"><div class="metric"><small>과정점수</small><strong>${process(r)} <span class="meta">/100</span></strong></div><div class="metric"><small>월말점수</small><strong>${num(r.examScore)} <span class="meta">/100</span></strong></div><div class="metric"><small>총점</small><strong>${total(r)} <span class="meta">/200</span></strong></div><div class="metric"><small>반 월말평균</small><strong>${ae}점</strong></div><div class="metric"><small>월말 비교</small><strong class="up">${diffText(num(r.examScore),ae)}</strong></div></div><div class="info-grid"><div class="metric"><small>숙제</small><strong>${num(r.homeworkScore)}/40</strong></div><div class="metric"><small>수상실</small><strong>${num(r.studyScore)}/40</strong></div><div class="metric"><small>추가</small><strong>${num(r.bonusScore)}/20</strong></div><div class="metric"><small>반 총점평균</small><strong>${at}점</strong></div><div class="metric"><small>총점 비교</small><strong class="up">${diffText(total(r),at)}</strong></div></div><div class="memo-grid"><div class="memo"><h3>선생님 내부 메모</h3><p>${r.teacherMemo||'입력된 메모가 없습니다.'}</p></div><div class="memo"><h3>학부모 공유 코멘트</h3><p>${r.parentComment||'입력된 코멘트가 없습니다.'}</p></div><div class="memo"><h3>다음 달 목표</h3><p>${r.goal||'입력된 목표가 없습니다.'}</p></div></div><div class="chart-wrap"><b>총점 변화 그래프</b><canvas id="teacherChart" width="900" height="250"></canvas></div>`;
+      drawChart('teacherChart', student.map(x=>({label:fmtMonth(x.month).replace('2026년 ',''),score:total(x)})),200); renderList();
     }
-
     function showParentReport() {
-      const name = parentStudentName.value.trim();
-      const code = parentAccessCode.value.trim();
-
-      const matchedRecords = records
-        .filter(record => record.name === name && record.parentCode === code)
-        .sort((a, b) => a.month.localeCompare(b.month));
-
-      if (matchedRecords.length === 0) {
-        parentError.style.display = "block";
-        parentReportArea.className = "empty";
-        parentReportArea.innerHTML = "학생 이름과 접근코드를 다시 확인해 주세요.";
-        return;
-      }
-
-      parentError.style.display = "none";
-
-      const latest = matchedRecords[matchedRecords.length - 1];
-      const classExamAverage = getClassMonthlyAverage(latest.className, latest.month);
-      const classTotalAverage = getClassTotalAverage(latest.className, latest.month);
-
-      const chartPoints = matchedRecords.map(record => ({
-        label: formatMonth(record.month).replace("2026년 ", ""),
-        score: getTotalScore(record)
-      }));
-
-      parentReportArea.className = "";
-      parentReportArea.innerHTML = `
-        <div class="detail-grid">
-          <div class="info-box">
-            <small>학생</small>
-            <strong>${latest.name}</strong>
-          </div>
-          <div class="info-box">
-            <small>반</small>
-            <strong>${latest.className}</strong>
-          </div>
-          <div class="info-box">
-            <small>기록 월</small>
-            <strong>${formatMonth(latest.month)}</strong>
-          </div>
-          <div class="info-box">
-            <small>과정점수</small>
-            <strong>${getProcessScore(latest)} / 100</strong>
-          </div>
-          <div class="info-box">
-            <small>총점</small>
-            <strong>${getTotalScore(latest)} / 200</strong>
-          </div>
-        </div>
-
-        <div class="detail-grid">
-          <div class="info-box">
-            <small>우리 아이 월말점수</small>
-            <strong>${getScoreValue(latest.examScore)} / 100</strong>
-          </div>
-          <div class="info-box">
-            <small>반 월말평균</small>
-            <strong>${classExamAverage} / 100</strong>
-          </div>
-          <div class="info-box">
-            <small>월말 비교</small>
-            <strong>${getDifferenceText(getScoreValue(latest.examScore), classExamAverage)}</strong>
-          </div>
-          <div class="info-box">
-            <small>반 총점평균</small>
-            <strong>${classTotalAverage} / 200</strong>
-          </div>
-          <div class="info-box">
-            <small>총점 비교</small>
-            <strong>${getDifferenceText(getTotalScore(latest), classTotalAverage)}</strong>
-          </div>
-        </div>
-
-        <div class="memo-grid">
-          <div class="memo-box">
-            <h3>선생님 코멘트</h3>
-            <p>${latest.parentComment || "입력된 코멘트가 없습니다."}</p>
-          </div>
-          <div class="memo-box">
-            <h3>다음 달 목표</h3>
-            <p>${latest.goal || "입력된 목표가 없습니다."}</p>
-          </div>
-          <div class="memo-box">
-            <h3>안내</h3>
-            <p>학부모 화면에서는 다른 학생 목록과 선생님 내부 메모가 표시되지 않습니다.</p>
-          </div>
-        </div>
-
-        <div class="chart">
-          <canvas id="parentChart" width="800" height="220"></canvas>
-        </div>
-      `;
-
-      drawChart("parentChart", chartPoints, 200);
+      const name=$('parentStudentName').value.trim(), code=$('parentAccessCode').value.trim();
+      const arr=records.filter(r=>r.name===name&&r.parentCode===code).sort((a,b)=>a.month.localeCompare(b.month));
+      if(!arr.length){ $('parentError').style.display='block'; $('parentReportArea').className='empty'; $('parentReportArea').innerHTML='학생 이름과 접근코드를 다시 확인해 주세요.'; return; }
+      $('parentError').style.display='none'; const r=arr[arr.length-1], ae=avgExam(r.className,r.month), at=avgTotal(r.className,r.month);
+      $('parentReportArea').className=''; $('parentReportArea').innerHTML=`<div class="name-line"><span class="student-name">${r.name}</span><span class="badge">${r.className}</span><span class="meta">${fmtMonth(r.month)}</span></div><div class="info-grid"><div class="metric"><small>과정점수</small><strong>${process(r)}/100</strong></div><div class="metric"><small>월말점수</small><strong>${num(r.examScore)}/100</strong></div><div class="metric"><small>총점</small><strong>${total(r)}/200</strong></div><div class="metric"><small>반 월말평균</small><strong>${ae}점</strong></div><div class="metric"><small>월말 비교</small><strong class="up">${diffText(num(r.examScore),ae)}</strong></div></div><div class="info-grid"><div class="metric"><small>반 총점평균</small><strong>${at}점</strong></div><div class="metric"><small>총점 비교</small><strong class="up">${diffText(total(r),at)}</strong></div><div class="metric"><small>숙제</small><strong>${num(r.homeworkScore)}/40</strong></div><div class="metric"><small>수상실</small><strong>${num(r.studyScore)}/40</strong></div><div class="metric"><small>추가</small><strong>${num(r.bonusScore)}/20</strong></div></div><div class="memo-grid"><div class="memo"><h3>선생님 코멘트</h3><p>${r.parentComment||'입력된 코멘트가 없습니다.'}</p></div><div class="memo"><h3>다음 달 목표</h3><p>${r.goal||'입력된 목표가 없습니다.'}</p></div><div class="memo"><h3>안내</h3><p>이 화면에는 다른 학생 점수와 선생님 내부 메모가 표시되지 않습니다.</p></div></div><div class="chart-wrap"><b>총점 변화 그래프</b><canvas id="parentChart" width="900" height="250"></canvas></div>`;
+      drawChart('parentChart', arr.map(x=>({label:fmtMonth(x.month).replace('2026년 ',''),score:total(x)})),200);
     }
-
-    function drawChart(canvasId, points, maxScore) {
-      const canvas = document.getElementById(canvasId);
-      const ctx = canvas.getContext("2d");
-
-      const width = canvas.width;
-      const height = canvas.height;
-      const padding = 40;
-
-      ctx.clearRect(0, 0, width, height);
-
-      ctx.strokeStyle = "#dddddd";
-      ctx.lineWidth = 1;
-
-      ctx.beginPath();
-      ctx.moveTo(padding, padding);
-      ctx.lineTo(padding, height - padding);
-      ctx.lineTo(width - padding, height - padding);
-      ctx.stroke();
-
-      if (points.length === 0) return;
-
-      const gap = points.length === 1 ? 0 : (width - padding * 2) / (points.length - 1);
-
-      const positions = points.map((point, index) => {
-        const x = points.length === 1 ? width / 2 : padding + gap * index;
-        const y = height - padding - (point.score / maxScore) * (height - padding * 2);
-        return { ...point, x, y };
-      });
-
-      ctx.strokeStyle = "#2457c5";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-
-      positions.forEach((point, index) => {
-        if (index === 0) ctx.moveTo(point.x, point.y);
-        else ctx.lineTo(point.x, point.y);
-      });
-
-      ctx.stroke();
-
-      positions.forEach(point => {
-        ctx.fillStyle = "#2457c5";
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "#222";
-        ctx.font = "14px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(`${point.score}점`, point.x, point.y - 12);
-        ctx.fillText(point.label, point.x, height - 14);
-      });
+    function drawChart(id, points, max) {
+      const c=$(id), ctx=c.getContext('2d'), w=c.width, h=c.height, p=42; ctx.clearRect(0,0,w,h); ctx.strokeStyle='#dce3ef'; ctx.lineWidth=1; for(let i=0;i<=4;i++){let y=p+(h-p*2)*i/4; ctx.beginPath(); ctx.moveTo(p,y); ctx.lineTo(w-p,y); ctx.stroke(); ctx.fillStyle='#7a8495'; ctx.font='13px Arial'; ctx.fillText(Math.round(max-(max*i/4)),8,y+4);} if(!points.length)return; const gap=points.length===1?0:(w-p*2)/(points.length-1); const pos=points.map((pt,i)=>({...pt,x:points.length===1?w/2:p+gap*i,y:h-p-(pt.score/max)*(h-p*2)})); ctx.strokeStyle='#1f4ea8'; ctx.lineWidth=3; ctx.beginPath(); pos.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y)); ctx.stroke(); pos.forEach(pt=>{ctx.fillStyle='#1f4ea8'; ctx.beginPath(); ctx.arc(pt.x,pt.y,5,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#17213a'; ctx.font='14px Arial'; ctx.textAlign='center'; ctx.fillText(pt.score+'점',pt.x,pt.y-12); ctx.fillText(pt.label,pt.x,h-14);});
     }
-
-    form.addEventListener("submit", function(event) {
-      event.preventDefault();
-
-      const newRecord = {
-        id: Date.now(),
-        className: document.getElementById("className").value.trim(),
-        name: document.getElementById("name").value.trim(),
-        parentCode: document.getElementById("parentCode").value.trim(),
-        month: document.getElementById("month").value,
-        homeworkScore: Number(document.getElementById("homeworkScore").value) || 0,
-        studyScore: Number(document.getElementById("studyScore").value) || 0,
-        bonusScore: Number(document.getElementById("bonusScore").value) || 0,
-        examScore: Number(document.getElementById("examScore").value) || 0,
-        teacherMemo: document.getElementById("teacherMemo").value.trim(),
-        parentComment: document.getElementById("parentComment").value.trim(),
-        goal: document.getElementById("goal").value.trim(),
-        createdAt: getTodayText()
-      };
-
-      records.push(newRecord);
-      renderList();
-      showTeacherDetail(newRecord.id);
-
-      statusMessage.style.display = "block";
-
-      setTimeout(() => {
-        statusMessage.style.display = "none";
-      }, 2500);
-
-      form.reset();
-    });
-
-    resetBtn.addEventListener("click", function() {
-      form.reset();
-      statusMessage.style.display = "none";
-    });
-
-    searchInput.addEventListener("input", renderList);
-    sortBtn.addEventListener("click", renderList);
-
-    teacherModeBtn.addEventListener("click", showTeacherPage);
-    parentModeBtn.addEventListener("click", showParentPage);
-    parentLoginBtn.addEventListener("click", showParentReport);
-
-    renderList();
-    showTeacherDetail(3);
+    $('recordForm').addEventListener('submit', e=>{ e.preventDefault(); const r={id:Date.now(),className:$('className').value.trim(),name:$('name').value.trim(),parentCode:$('parentCode').value.trim(),month:$('month').value,homeworkScore:num($('homeworkScore').value),studyScore:num($('studyScore').value),bonusScore:num($('bonusScore').value),examScore:num($('examScore').value),teacherMemo:$('teacherMemo').value.trim(),parentComment:$('parentComment').value.trim(),goal:$('goal').value.trim(),createdAt:today()}; records.push(r); $('recordForm').reset(); $('statusMessage').style.display='block'; setTimeout(()=>$('statusMessage').style.display='none',2200); showTeacherDetail(r.id); });
+    $('resetBtn').onclick=()=>$('recordForm').reset(); $('searchInput').oninput=renderList; $('sortBtn').onclick=renderList; $('teacherModeBtn').onclick=showTeacher; $('parentModeBtn').onclick=showParent; $('parentLoginBtn').onclick=showParentReport; $('openParentReportBtn').onclick=()=>{ const r=records.find(x=>x.id===selectedRecordId); showParent(); $('parentStudentName').value=r.name; $('parentAccessCode').value=r.parentCode; showParentReport(); };
+    renderList(); showTeacherDetail(3);
   </script>
 </body>
 </html>
