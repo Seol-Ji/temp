@@ -37,9 +37,15 @@
       padding: 20px;
     }
 
+    .mode-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
     .top-layout {
       display: grid;
-      grid-template-columns: 380px 1fr;
+      grid-template-columns: 390px 1fr;
       gap: 20px;
       align-items: start;
     }
@@ -49,6 +55,7 @@
       border: 1px solid #ddd;
       border-radius: 12px;
       padding: 18px;
+      margin-bottom: 20px;
     }
 
     h2 {
@@ -64,7 +71,7 @@
       font-size: 14px;
     }
 
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
       border: 1px solid #bbb;
@@ -87,6 +94,7 @@
       display: flex;
       gap: 8px;
       margin-top: 16px;
+      flex-wrap: wrap;
     }
 
     button {
@@ -105,6 +113,11 @@
     .secondary {
       background: #e9ecf2;
       color: #222;
+    }
+
+    .danger {
+      background: #f2e9e9;
+      color: #a33333;
     }
 
     .search-area {
@@ -139,10 +152,6 @@
       display: block;
       color: #555;
       font-size: 14px;
-    }
-
-    .detail {
-      margin-top: 20px;
     }
 
     .detail-grid {
@@ -210,6 +219,15 @@
       display: none;
     }
 
+    .error-message {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #fff0f0;
+      color: #a33333;
+      display: none;
+    }
+
     .empty {
       color: #777;
       padding: 20px;
@@ -217,6 +235,20 @@
       border: 1px dashed #bbb;
       border-radius: 10px;
       background: #fafafa;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .notice {
+      font-size: 14px;
+      color: #666;
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 14px;
     }
 
     @media (max-width: 800px) {
@@ -234,6 +266,10 @@
       header h1 {
         font-size: 22px;
       }
+
+      .search-area {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -242,82 +278,126 @@
   <header>
     <div class="wrap">
       <h1>학생 성장 아카이브</h1>
-      <p>숙제점수, 수상실점수, 추가점수, 월말점수를 함께 기록하고 총 200점 기준으로 확인합니다.</p>
+      <p>선생님은 전체 기록을 관리하고, 학부모는 접근코드로 내 아이 기록만 확인합니다.</p>
+
+      <div class="mode-buttons">
+        <button class="primary" id="teacherModeBtn">선생님 화면</button>
+        <button class="secondary" id="parentModeBtn">학부모 화면</button>
+      </div>
     </div>
   </header>
 
   <main class="wrap">
-    <section class="top-layout">
-      <div class="box">
-        <h2>학생 성장 기록 입력</h2>
+    <section id="teacherPage">
+      <div class="top-layout">
+        <div class="box">
+          <h2>학생 성장 기록 입력</h2>
 
-        <form id="recordForm">
-          <label for="name">학생 닉네임</label>
-          <input id="name" type="text" placeholder="예: 김OO" required />
+          <form id="recordForm">
+            <label for="className">반</label>
+            <input id="className" type="text" placeholder="예: 초3-1" required />
 
-          <label for="month">기록 월</label>
-          <input id="month" type="month" required />
+            <label for="name">학생 닉네임</label>
+            <input id="name" type="text" placeholder="예: 김OO" required />
 
-          <div class="score-row">
-            <div>
-              <label for="homeworkScore">숙제 점수 / 40점</label>
-              <input id="homeworkScore" type="number" min="0" max="40" placeholder="예: 35" />
+            <label for="parentCode">학부모 접근코드</label>
+            <input id="parentCode" type="text" placeholder="예: KIM4821" required />
+
+            <label for="month">기록 월</label>
+            <input id="month" type="month" required />
+
+            <div class="score-row">
+              <div>
+                <label for="homeworkScore">숙제 점수 / 40점</label>
+                <input id="homeworkScore" type="number" min="0" max="40" placeholder="예: 35" />
+              </div>
+
+              <div>
+                <label for="studyScore">수상실 점수 / 40점</label>
+                <input id="studyScore" type="number" min="0" max="40" placeholder="예: 38" />
+              </div>
             </div>
 
-            <div>
-              <label for="studyScore">수상실 점수 / 40점</label>
-              <input id="studyScore" type="number" min="0" max="40" placeholder="예: 38" />
+            <div class="score-row">
+              <div>
+                <label for="bonusScore">추가 점수 / 20점</label>
+                <input id="bonusScore" type="number" min="0" max="20" placeholder="예: 15" />
+              </div>
+
+              <div>
+                <label for="examScore">월말 점수 / 100점</label>
+                <input id="examScore" type="number" min="0" max="100" placeholder="예: 88" />
+              </div>
             </div>
-          </div>
 
-          <div class="score-row">
-            <div>
-              <label for="bonusScore">추가 점수 / 20점</label>
-              <input id="bonusScore" type="number" min="0" max="20" placeholder="예: 15" />
+            <label for="teacherMemo">선생님 내부 메모</label>
+            <textarea id="teacherMemo" placeholder="학부모에게 보이지 않는 인수인계 메모"></textarea>
+
+            <label for="parentComment">학부모 공유 코멘트</label>
+            <textarea id="parentComment" placeholder="학부모에게 보여줘도 되는 코멘트"></textarea>
+
+            <label for="goal">다음 달 목표</label>
+            <textarea id="goal" placeholder="예: 계산 실수 줄이기"></textarea>
+
+            <div class="button-row">
+              <button class="primary" type="submit">저장하기</button>
+              <button class="secondary" type="button" id="resetBtn">입력 초기화</button>
             </div>
 
-            <div>
-              <label for="examScore">월말 점수 / 100점</label>
-              <input id="examScore" type="number" min="0" max="100" placeholder="예: 88" />
+            <div class="status-message" id="statusMessage">
+              기록이 저장되었습니다. 과정점수, 총점, 반 평균이 자동 계산됩니다.
             </div>
-          </div>
-
-          <label for="comment">선생님 코멘트</label>
-          <textarea id="comment" placeholder="예: 발표 참여가 적극적이었습니다."></textarea>
-
-          <label for="note">특이사항</label>
-          <textarea id="note" placeholder="예: 숙제 제출이 조금 늦었습니다."></textarea>
-
-          <label for="goal">다음 달 목표</label>
-          <textarea id="goal" placeholder="예: 독해 속도 향상"></textarea>
-
-          <div class="button-row">
-            <button class="primary" type="submit">저장하기</button>
-            <button class="secondary" type="button" id="resetBtn">입력 초기화</button>
-          </div>
-
-          <div class="status-message" id="statusMessage">
-            기록이 저장되었습니다. 과정점수와 총점이 자동 계산되었습니다.
-          </div>
-        </form>
-      </div>
-
-      <div class="box">
-        <h2>학생 기록 목록</h2>
-
-        <div class="search-area">
-          <input id="searchInput" type="text" placeholder="학생 검색" />
-          <button class="secondary" id="sortBtn">최신순 정렬</button>
+          </form>
         </div>
 
-        <div id="recordList" class="card-list"></div>
+        <div class="box">
+          <h2>학생 기록 목록</h2>
+
+          <div class="search-area">
+            <input id="searchInput" type="text" placeholder="학생 또는 반 검색" />
+            <button class="secondary" id="sortBtn">최신순 정렬</button>
+          </div>
+
+          <div id="recordList" class="card-list"></div>
+        </div>
       </div>
+
+      <section class="box">
+        <h2>학생 상세 - 선생님용</h2>
+        <div id="teacherDetailArea" class="empty">
+          학생 카드의 [상세보기]를 누르면 성장 기록과 반 평균 비교가 표시됩니다.
+        </div>
+      </section>
     </section>
 
-    <section class="box detail">
-      <h2>학생 상세</h2>
-      <div id="detailArea" class="empty">
-        학생 카드의 [상세보기]를 누르면 성장 기록과 점수 그래프가 표시됩니다.
+    <section id="parentPage" class="hidden">
+      <div class="box">
+        <h2>학부모용 성장 리포트</h2>
+
+        <label for="parentStudentName">학생 이름</label>
+        <input id="parentStudentName" type="text" placeholder="예: 김OO" />
+
+        <label for="parentAccessCode">학부모 접근코드</label>
+        <input id="parentAccessCode" type="text" placeholder="예: KIM4821" />
+
+        <div class="button-row">
+          <button class="primary" id="parentLoginBtn">내 아이 기록 보기</button>
+        </div>
+
+        <div class="error-message" id="parentError">
+          학생 이름 또는 접근코드가 올바르지 않습니다.
+        </div>
+
+        <div class="notice">
+          데모용 HTML에서는 접근코드로 화면을 나누지만, 실제 서비스에서는 다른 학생 데이터가 아예 내려오지 않도록 Firebase나 Supabase 같은 DB 연결이 필요합니다.
+        </div>
+      </div>
+
+      <div class="box">
+        <h2>내 아이 성장 리포트</h2>
+        <div id="parentReportArea" class="empty">
+          학생 이름과 접근코드를 입력하면 내 아이 기록만 표시됩니다.
+        </div>
       </div>
     </section>
   </main>
@@ -326,52 +406,99 @@
     let records = [
       {
         id: 1,
+        className: "초3-1",
         name: "김OO",
+        parentCode: "KIM4821",
         month: "2026-04",
         homeworkScore: 34,
         studyScore: 33,
         bonusScore: 15,
         examScore: 82,
-        comment: "수업 집중도가 좋아지고 있습니다.",
-        note: "어휘 복습이 조금 더 필요합니다.",
+        teacherMemo: "어휘 복습을 더 챙겨야 합니다.",
+        parentComment: "수업 집중도가 좋아지고 있습니다.",
         goal: "기본 어휘 30개 암기",
         createdAt: "2026-04-30"
       },
       {
         id: 2,
+        className: "초3-1",
         name: "김OO",
+        parentCode: "KIM4821",
         month: "2026-05",
         homeworkScore: 36,
         studyScore: 34,
         bonusScore: 15,
         examScore: 85,
-        comment: "문제 풀이 속도가 좋아졌습니다.",
-        note: "긴 지문에서 집중력이 떨어질 때가 있습니다.",
+        teacherMemo: "긴 지문에서 집중력이 떨어질 때가 있습니다.",
+        parentComment: "문제 풀이 속도가 좋아졌습니다.",
         goal: "긴 지문 독해 연습",
         createdAt: "2026-05-31"
       },
       {
         id: 3,
+        className: "초3-1",
         name: "김OO",
+        parentCode: "KIM4821",
         month: "2026-06",
         homeworkScore: 37,
         studyScore: 36,
-        bonusScore: 15,
+        bonusScore: 18,
         examScore: 88,
-        comment: "발표 참여가 적극적이었습니다.",
-        note: "숙제 제출이 조금 늦었습니다.",
-        goal: "독해 속도 향상",
+        teacherMemo: "숙제 제출이 조금 늦었습니다.",
+        parentComment: "발표 참여가 적극적이었습니다.",
+        goal: "계산 실수 줄이기",
+        createdAt: "2026-06-30"
+      },
+      {
+        id: 4,
+        className: "초3-1",
+        name: "이OO",
+        parentCode: "LEE7392",
+        month: "2026-06",
+        homeworkScore: 35,
+        studyScore: 35,
+        bonusScore: 16,
+        examScore: 84,
+        teacherMemo: "문제 풀이 과정을 더 자세히 확인해야 합니다.",
+        parentComment: "기본 개념 이해가 안정적입니다.",
+        goal: "서술형 풀이 연습",
+        createdAt: "2026-06-30"
+      },
+      {
+        id: 5,
+        className: "초3-1",
+        name: "박OO",
+        parentCode: "PARK1058",
+        month: "2026-06",
+        homeworkScore: 32,
+        studyScore: 34,
+        bonusScore: 14,
+        examScore: 80,
+        teacherMemo: "오답 정리 습관이 필요합니다.",
+        parentComment: "꾸준히 따라오고 있으며 복습이 중요합니다.",
+        goal: "오답노트 작성",
         createdAt: "2026-06-30"
       }
     ];
+
+    const teacherPage = document.getElementById("teacherPage");
+    const parentPage = document.getElementById("parentPage");
+    const teacherModeBtn = document.getElementById("teacherModeBtn");
+    const parentModeBtn = document.getElementById("parentModeBtn");
 
     const form = document.getElementById("recordForm");
     const resetBtn = document.getElementById("resetBtn");
     const searchInput = document.getElementById("searchInput");
     const sortBtn = document.getElementById("sortBtn");
     const recordList = document.getElementById("recordList");
-    const detailArea = document.getElementById("detailArea");
+    const teacherDetailArea = document.getElementById("teacherDetailArea");
     const statusMessage = document.getElementById("statusMessage");
+
+    const parentStudentName = document.getElementById("parentStudentName");
+    const parentAccessCode = document.getElementById("parentAccessCode");
+    const parentLoginBtn = document.getElementById("parentLoginBtn");
+    const parentError = document.getElementById("parentError");
+    const parentReportArea = document.getElementById("parentReportArea");
 
     function getScoreValue(value) {
       return Number(value) || 0;
@@ -399,11 +526,64 @@
       return today.toISOString().slice(0, 10);
     }
 
+    function getClassMonthlyAverage(className, month) {
+      const sameClassRecords = records.filter(record =>
+        record.className === className && record.month === month
+      );
+
+      if (sameClassRecords.length === 0) return 0;
+
+      const total = sameClassRecords.reduce((sum, record) => {
+        return sum + getScoreValue(record.examScore);
+      }, 0);
+
+      return Math.round(total / sameClassRecords.length);
+    }
+
+    function getClassTotalAverage(className, month) {
+      const sameClassRecords = records.filter(record =>
+        record.className === className && record.month === month
+      );
+
+      if (sameClassRecords.length === 0) return 0;
+
+      const total = sameClassRecords.reduce((sum, record) => {
+        return sum + getTotalScore(record);
+      }, 0);
+
+      return Math.round(total / sameClassRecords.length);
+    }
+
+    function getDifferenceText(studentScore, averageScore) {
+      const diff = studentScore - averageScore;
+
+      if (diff > 0) return `반 평균보다 +${diff}점`;
+      if (diff < 0) return `반 평균보다 ${diff}점`;
+      return "반 평균과 동일";
+    }
+
+    function showTeacherPage() {
+      teacherPage.classList.remove("hidden");
+      parentPage.classList.add("hidden");
+      teacherModeBtn.className = "primary";
+      parentModeBtn.className = "secondary";
+    }
+
+    function showParentPage() {
+      teacherPage.classList.add("hidden");
+      parentPage.classList.remove("hidden");
+      teacherModeBtn.className = "secondary";
+      parentModeBtn.className = "primary";
+    }
+
     function renderList() {
       const keyword = searchInput.value.trim().toLowerCase();
 
       const filteredRecords = records
-        .filter(record => record.name.toLowerCase().includes(keyword))
+        .filter(record =>
+          record.name.toLowerCase().includes(keyword) ||
+          record.className.toLowerCase().includes(keyword)
+        )
         .sort((a, b) => b.month.localeCompare(a.month));
 
       recordList.innerHTML = "";
@@ -414,92 +594,97 @@
       }
 
       filteredRecords.forEach(record => {
+        const classExamAverage = getClassMonthlyAverage(record.className, record.month);
+
         const card = document.createElement("div");
         card.className = "student-card";
 
         card.innerHTML = `
           <div>
             <strong>${record.name}</strong>
-            <span>${formatMonth(record.month)}</span>
-            <span>
-              과정 ${getProcessScore(record)}점 / 100점 
-              · 월말 ${getScoreValue(record.examScore)}점 / 100점
-            </span>
-            <span>
-              총점 ${getTotalScore(record)}점 / 200점 · 등록일 ${record.createdAt}
-            </span>
+            <span>${record.className} · ${formatMonth(record.month)}</span>
+            <span>과정 ${getProcessScore(record)}점 / 100점 · 월말 ${getScoreValue(record.examScore)}점 / 100점</span>
+            <span>총점 ${getTotalScore(record)}점 / 200점 · 반 월말평균 ${classExamAverage}점</span>
+            <span>등록일 ${record.createdAt}</span>
           </div>
-          <button class="primary" onclick="showDetail(${record.id})">상세보기</button>
+          <button class="primary" onclick="showTeacherDetail(${record.id})">상세보기</button>
         `;
 
         recordList.appendChild(card);
       });
     }
 
-    function showDetail(id) {
+    function showTeacherDetail(id) {
       const selected = records.find(record => record.id === id);
 
       const studentRecords = records
-        .filter(record => record.name === selected.name)
+        .filter(record => record.name === selected.name && record.parentCode === selected.parentCode)
         .sort((a, b) => a.month.localeCompare(b.month));
+
+      const classExamAverage = getClassMonthlyAverage(selected.className, selected.month);
+      const classTotalAverage = getClassTotalAverage(selected.className, selected.month);
 
       const chartPoints = studentRecords.map(record => ({
         label: formatMonth(record.month).replace("2026년 ", ""),
         score: getTotalScore(record)
       }));
 
-      detailArea.className = "";
-      detailArea.innerHTML = `
+      teacherDetailArea.className = "";
+      teacherDetailArea.innerHTML = `
         <div class="detail-grid">
           <div class="info-box">
             <small>학생</small>
             <strong>${selected.name}</strong>
           </div>
           <div class="info-box">
-            <small>숙제 점수</small>
-            <strong>${getScoreValue(selected.homeworkScore)} / 40</strong>
-          </div>
-          <div class="info-box">
-            <small>수상실 점수</small>
-            <strong>${getScoreValue(selected.studyScore)} / 40</strong>
-          </div>
-          <div class="info-box">
-            <small>추가 점수</small>
-            <strong>${getScoreValue(selected.bonusScore)} / 20</strong>
+            <small>반</small>
+            <strong>${selected.className}</strong>
           </div>
           <div class="info-box">
             <small>과정점수</small>
             <strong>${getProcessScore(selected)} / 100</strong>
           </div>
-        </div>
-
-        <div class="detail-grid">
           <div class="info-box">
-            <small>최근 기록 월</small>
-            <strong>${formatMonth(selected.month)}</strong>
-          </div>
-          <div class="info-box">
-            <small>월말 점수</small>
+            <small>월말점수</small>
             <strong>${getScoreValue(selected.examScore)} / 100</strong>
           </div>
           <div class="info-box">
             <small>총점</small>
             <strong>${getTotalScore(selected)} / 200</strong>
           </div>
+        </div>
+
+        <div class="detail-grid">
           <div class="info-box">
-            <small>누적 기록</small>
-            <strong>${studentRecords.length}개</strong>
+            <small>반 월말평균</small>
+            <strong>${classExamAverage} / 100</strong>
+          </div>
+          <div class="info-box">
+            <small>월말 비교</small>
+            <strong>${getDifferenceText(getScoreValue(selected.examScore), classExamAverage)}</strong>
+          </div>
+          <div class="info-box">
+            <small>반 총점평균</small>
+            <strong>${classTotalAverage} / 200</strong>
+          </div>
+          <div class="info-box">
+            <small>총점 비교</small>
+            <strong>${getDifferenceText(getTotalScore(selected), classTotalAverage)}</strong>
+          </div>
+          <div class="info-box">
+            <small>학부모 코드</small>
+            <strong>${selected.parentCode}</strong>
           </div>
         </div>
 
         <div class="memo-grid">
           <div class="memo-box">
-            <h3>선생님 코멘트</h3>
-            <p>${selected.comment || "입력된 코멘트가 없습니다."}</p>
+            <h3>선생님 내부 메모</h3>
+            <p>${selected.teacherMemo || "입력된 내부 메모가 없습니다."}</p>
           </div>
           <div class="memo-box">
-            <h3>특이사항</h3>
-            <p>${selected.note || "특이사항 없음"}</p>
+            <h3>학부모 공유 코멘트</h3>
+            <p>${selected.parentComment || "입력된 공유 코멘트가 없습니다."}</p>
           </div>
           <div class="memo-box">
             <h3>다음 달 목표</h3>
@@ -508,15 +693,112 @@
         </div>
 
         <div class="chart">
-          <canvas id="growthChart" width="800" height="220"></canvas>
+          <canvas id="teacherChart" width="800" height="220"></canvas>
         </div>
       `;
 
-      drawChart(chartPoints);
+      drawChart("teacherChart", chartPoints, 200);
     }
 
-    function drawChart(points) {
-      const canvas = document.getElementById("growthChart");
+    function showParentReport() {
+      const name = parentStudentName.value.trim();
+      const code = parentAccessCode.value.trim();
+
+      const matchedRecords = records
+        .filter(record => record.name === name && record.parentCode === code)
+        .sort((a, b) => a.month.localeCompare(b.month));
+
+      if (matchedRecords.length === 0) {
+        parentError.style.display = "block";
+        parentReportArea.className = "empty";
+        parentReportArea.innerHTML = "학생 이름과 접근코드를 다시 확인해 주세요.";
+        return;
+      }
+
+      parentError.style.display = "none";
+
+      const latest = matchedRecords[matchedRecords.length - 1];
+      const classExamAverage = getClassMonthlyAverage(latest.className, latest.month);
+      const classTotalAverage = getClassTotalAverage(latest.className, latest.month);
+
+      const chartPoints = matchedRecords.map(record => ({
+        label: formatMonth(record.month).replace("2026년 ", ""),
+        score: getTotalScore(record)
+      }));
+
+      parentReportArea.className = "";
+      parentReportArea.innerHTML = `
+        <div class="detail-grid">
+          <div class="info-box">
+            <small>학생</small>
+            <strong>${latest.name}</strong>
+          </div>
+          <div class="info-box">
+            <small>반</small>
+            <strong>${latest.className}</strong>
+          </div>
+          <div class="info-box">
+            <small>기록 월</small>
+            <strong>${formatMonth(latest.month)}</strong>
+          </div>
+          <div class="info-box">
+            <small>과정점수</small>
+            <strong>${getProcessScore(latest)} / 100</strong>
+          </div>
+          <div class="info-box">
+            <small>총점</small>
+            <strong>${getTotalScore(latest)} / 200</strong>
+          </div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="info-box">
+            <small>우리 아이 월말점수</small>
+            <strong>${getScoreValue(latest.examScore)} / 100</strong>
+          </div>
+          <div class="info-box">
+            <small>반 월말평균</small>
+            <strong>${classExamAverage} / 100</strong>
+          </div>
+          <div class="info-box">
+            <small>월말 비교</small>
+            <strong>${getDifferenceText(getScoreValue(latest.examScore), classExamAverage)}</strong>
+          </div>
+          <div class="info-box">
+            <small>반 총점평균</small>
+            <strong>${classTotalAverage} / 200</strong>
+          </div>
+          <div class="info-box">
+            <small>총점 비교</small>
+            <strong>${getDifferenceText(getTotalScore(latest), classTotalAverage)}</strong>
+          </div>
+        </div>
+
+        <div class="memo-grid">
+          <div class="memo-box">
+            <h3>선생님 코멘트</h3>
+            <p>${latest.parentComment || "입력된 코멘트가 없습니다."}</p>
+          </div>
+          <div class="memo-box">
+            <h3>다음 달 목표</h3>
+            <p>${latest.goal || "입력된 목표가 없습니다."}</p>
+          </div>
+          <div class="memo-box">
+            <h3>안내</h3>
+            <p>학부모 화면에서는 다른 학생 목록과 선생님 내부 메모가 표시되지 않습니다.</p>
+          </div>
+        </div>
+
+        <div class="chart">
+          <canvas id="parentChart" width="800" height="220"></canvas>
+        </div>
+      `;
+
+      drawChart("parentChart", chartPoints, 200);
+    }
+
+    function drawChart(canvasId, points, maxScore) {
+      const canvas = document.getElementById(canvasId);
       const ctx = canvas.getContext("2d");
 
       const width = canvas.width;
@@ -536,13 +818,11 @@
 
       if (points.length === 0) return;
 
-      const maxScore = 200;
-      const minScore = 0;
       const gap = points.length === 1 ? 0 : (width - padding * 2) / (points.length - 1);
 
       const positions = points.map((point, index) => {
         const x = points.length === 1 ? width / 2 : padding + gap * index;
-        const y = height - padding - ((point.score - minScore) / (maxScore - minScore)) * (height - padding * 2);
+        const y = height - padding - (point.score / maxScore) * (height - padding * 2);
         return { ...point, x, y };
       });
 
@@ -576,21 +856,23 @@
 
       const newRecord = {
         id: Date.now(),
+        className: document.getElementById("className").value.trim(),
         name: document.getElementById("name").value.trim(),
+        parentCode: document.getElementById("parentCode").value.trim(),
         month: document.getElementById("month").value,
         homeworkScore: Number(document.getElementById("homeworkScore").value) || 0,
         studyScore: Number(document.getElementById("studyScore").value) || 0,
         bonusScore: Number(document.getElementById("bonusScore").value) || 0,
         examScore: Number(document.getElementById("examScore").value) || 0,
-        comment: document.getElementById("comment").value.trim(),
-        note: document.getElementById("note").value.trim(),
+        teacherMemo: document.getElementById("teacherMemo").value.trim(),
+        parentComment: document.getElementById("parentComment").value.trim(),
         goal: document.getElementById("goal").value.trim(),
         createdAt: getTodayText()
       };
 
       records.push(newRecord);
       renderList();
-      showDetail(newRecord.id);
+      showTeacherDetail(newRecord.id);
 
       statusMessage.style.display = "block";
 
@@ -609,8 +891,12 @@
     searchInput.addEventListener("input", renderList);
     sortBtn.addEventListener("click", renderList);
 
+    teacherModeBtn.addEventListener("click", showTeacherPage);
+    parentModeBtn.addEventListener("click", showParentPage);
+    parentLoginBtn.addEventListener("click", showParentReport);
+
     renderList();
-    showDetail(3);
+    showTeacherDetail(3);
   </script>
 </body>
 </html>
